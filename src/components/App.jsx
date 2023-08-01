@@ -1,4 +1,10 @@
-export const App = () => {
+
+import { ContactForm } from './ContactForm/ContactForm';
+import { ContactList } from './ContactList/ContactList';
+import { Filter } from './Filter/Filter';
+
+//App
+function App() {
   return (
     <div
       style={{
@@ -7,10 +13,17 @@ export const App = () => {
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 40,
-        color: '#010101'
+        color: '#010101',
+        flexDirection: 'column',
       }}
     >
-      React homework template
+      <h1>PhoneBook</h1>
+      <ContactForm />
+      <h2>Contacts</h2>
+      <Filter />
+      <ContactList />
     </div>
   );
-};
+}
+
+export default App;
