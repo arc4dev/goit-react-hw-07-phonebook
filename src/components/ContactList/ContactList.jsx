@@ -1,22 +1,32 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ContactItem from '../ContactItem/ContactItem';
-import { getContacts, getFilterValue } from 'redux/selectors';
-
-const getVisibleContacts = (contacts, filter) => {
-  return contacts.filter(contact =>
-    contact.name.toLowerCase().startsWith(filter.toLowerCase())
-  );
-};
+import {
+  selectError,
+  selectIsLoading,
+  selectVisibleContacts,
+} from 'redux/selectors';
+import { useEffect } from 'react';
+import { fetchContacts } from 'redux/operations';
 
 export const ContactList = ({ handleClick }) => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilterValue);
+  const dispatch = useDispatch();
 
-  const visibleContacts = getVisibleContacts(contacts, filter);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const visibleContacts = useSelector(selectVisibleContacts);
 
   return (
     <ul>
-      {visibleContacts.length > 0 ? (
+      {error && <p>{error}</p>}
+
+      {isLoading ? (
+        <p>Loading contacts...</p>
+      ) : visibleContacts.length > 0 ? (
         visibleContacts.map(contact => (
           <ContactItem
             key={contact.name}
@@ -25,7 +35,7 @@ export const ContactList = ({ handleClick }) => {
           />
         ))
       ) : (
-        <p>Nie posiadasz zadnych kontaktow!</p>
+        <p>You don't have any contacts!</p>
       )}
     </ul>
   );

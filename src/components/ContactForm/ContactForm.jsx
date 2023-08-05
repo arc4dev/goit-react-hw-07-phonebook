@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/slices/contactsSlice';
 import css from './ContactForm.module.css';
-import { getContacts } from 'redux/selectors';
+import { selectContacts } from 'redux/selectors';
+import { addContact } from 'redux/operations';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
 
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -19,12 +19,7 @@ export const ContactForm = () => {
 
     if (isDuplicate) return alert('Contact with the same name already exists!');
 
-    dispatch(
-      addContact({
-        name,
-        number,
-      })
-    );
+    dispatch(addContact({ name, number }));
 
     form.reset();
   };
